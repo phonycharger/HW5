@@ -54,7 +54,7 @@ WordFrequency<Hasher>::WordFrequency( std::istream & iStream )
   while( iStream >> token )
   {
     auto clean = sanitize( token );
-    if( !clean.empty() ) ++words_[ clean ];
+    if( !clean.empty() ) ++this->words_[ clean ];
   }
 }
 /////////////////////// END-TO-DO (2) ////////////////////////////
@@ -70,7 +70,7 @@ WordFrequency<Hasher>::WordFrequency( std::istream & iStream )
 template<typename Hasher>
 std::size_t WordFrequency<Hasher>::numberOfWords() const
 {
-  return words_.size();
+  return this->words_.size();
 }
 /////////////////////// END-TO-DO (3) ////////////////////////////
 
@@ -86,8 +86,8 @@ template<typename Hasher>
 std::size_t WordFrequency<Hasher>::wordCount( std::string_view word ) const
 {
   auto clean = sanitize( word );
-  auto it    = words_.find( clean );
-  return ( it == words_.end() ) ? 0 : it->second;
+  auto it    = this->words_.find( clean );
+  return ( it == this->words_.end() ) ? 0 : it->second;
 }
 /////////////////////// END-TO-DO (4) ////////////////////////////
 
@@ -102,10 +102,11 @@ std::size_t WordFrequency<Hasher>::wordCount( std::string_view word ) const
 template<typename Hasher>
 std::string WordFrequency<Hasher>::mostFrequentWord() const
 {
-  if( words_.empty() ) return {};
+  if( this->words_.empty() ) return {};
 
-  auto best = words_.begin();
-  for( auto it = std::next( words_.begin() ); it != words_.end(); ++it )
+  auto best = this->words_.begin();
+  for( auto it = std::next( this->words_.begin() );
+        it != this->words_.end(); ++it )
   {
     if( it->second > best->second ) best = it;
   }
@@ -125,9 +126,9 @@ template<typename Hasher>
 std::size_t WordFrequency<Hasher>::maxBucketSize() const
 {
   std::size_t maxSize = 0;
-  for( std::size_t i = 0; i < words_.bucket_count(); ++i )
+  for( std::size_t b = 0; b < this->words_.bucket_count(); ++b )
   {
-    maxSize = std::max( maxSize, words_.bucket_size( i ) );
+    maxSize = std::max( maxSize, this->words_.bucket_size( b ) );
   }
   return maxSize;
 }
@@ -144,9 +145,10 @@ std::size_t WordFrequency<Hasher>::maxBucketSize() const
 template<typename Hasher>
 double WordFrequency<Hasher>::bucketSizeAverage() const
 {
-  auto buckets = words_.bucket_count();
+  auto buckets = this->words_.bucket_count();
   if( buckets == 0 ) return 0.0;
-  return static_cast<double>( words_.size() ) / static_cast<double>( buckets );
+  return static_cast<double>( this->words_.size() ) /
+         static_cast<double>( buckets );
 }
 /////////////////////// END-TO-DO (7) ////////////////////////////
 
