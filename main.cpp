@@ -1,9 +1,10 @@
 ///////////////////////// TO-DO (1) //////////////////////////////
-  /// Include necessary header files
-  /// Hint:  Include what you use, use what you include
-  ///
-  /// Do not put anything else in this section, i.e. comments, classes, functions, etc.  Only #include directives
-
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <unordered_map>
+#include "Regression.hpp"
+#include "WordFrequency.hpp"
 /////////////////////// END-TO-DO (1) ////////////////////////////
 
 
@@ -30,7 +31,12 @@ namespace
     std::size_t operator()( const std::string & key ) const noexcept
     {
       ///////////////////////// TO-DO (2) //////////////////////////////
-
+   std::size_t hash = 0;
+      for( unsigned char ch : key )
+      {
+        hash = hash * 131u + ch;
+      }
+      return hash;
       /////////////////////// END-TO-DO (2) ////////////////////////////
     }
   };
