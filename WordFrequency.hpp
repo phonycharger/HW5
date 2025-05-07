@@ -5,9 +5,7 @@
 #include <unordered_map>
 #include <string>
 #include <string_view>
-#include <istream>
-#include <functional>
-#include <cstddef>
+#include <istream> 
 /////////////////////// END-TO-DO (1) ////////////////////////////
 
 
@@ -32,7 +30,7 @@ class WordFrequency
   private:
     // Instance Attributes - See requirements
     ///////////////////////// TO-DO (2) //////////////////////////////
-std::unordered_map<std::string, std::size_t, Hasher> wordCounts_;
+std::unordered_map<std::string, std::size_t, Hasher> words_;
     /////////////////////// END-TO-DO (2) ////////////////////////////
 };
 
