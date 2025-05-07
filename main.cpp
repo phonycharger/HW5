@@ -3,8 +3,9 @@
 #include <fstream>
 #include <string>
 #include <unordered_map>
-#include "Regression.hpp"
+#include "CheckResults.hpp"
 #include "WordFrequency.hpp"
+#include "WordFrequency.hxx"
 /////////////////////// END-TO-DO (1) ////////////////////////////
 
 
