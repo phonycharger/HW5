@@ -5,7 +5,6 @@
 #include <unordered_map>
 #include "CheckResults.hpp"
 #include "WordFrequency.hpp"
-#include "WordFrequency.hxx"
 /////////////////////// END-TO-DO (1) ////////////////////////////
 
 
