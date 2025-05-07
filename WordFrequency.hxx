@@ -2,11 +2,12 @@
 #define WORD_FREQUENCY_HXX
 
 ///////////////////////// TO-DO (1) //////////////////////////////
-  /// Include necessary header files
-  /// Hint:  Include what you use, use what you include
-  ///
-  /// Do not put anything else in this section, i.e. comments, classes, functions, etc.  Only #include directives
-
+#include <unordered_map>
+#include <string>
+#include <string_view>
+#include <istream>
+#include <numeric>
+#include <locale>
 /////////////////////// END-TO-DO (1) ////////////////////////////
 
 
@@ -46,7 +47,16 @@ namespace
 
 // Implement WordFrequency::WordFrequency( std::istream ) - See requirements
 ///////////////////////// TO-DO (2) //////////////////////////////
-
+template<typename Hasher>
+WordFrequency<Hasher>::WordFrequency( std::istream & iStream )
+{
+  std::string token;
+  while( iStream >> token )
+  {
+    auto clean = sanitize( token );
+    if( !clean.empty() ) ++words_[ clean ];
+  }
+}
 /////////////////////// END-TO-DO (2) ////////////////////////////
 
 
@@ -57,7 +67,11 @@ namespace
 
 // Implement WordFrequency::numberOfWords() const - See requirements
 ///////////////////////// TO-DO (3) //////////////////////////////
-
+template<typename Hasher>
+std::size_t WordFrequency<Hasher>::numberOfWords() const
+{
+  return words_.size();
+}
 /////////////////////// END-TO-DO (3) ////////////////////////////
 
 
@@ -68,7 +82,13 @@ namespace
 
 // Implement WordFrequency::wordCount( const std::string & ) const - See requirements
 ///////////////////////// TO-DO (4) //////////////////////////////
-
+template<typename Hasher>
+std::size_t WordFrequency<Hasher>::wordCount( std::string_view word ) const
+{
+  auto clean = sanitize( word );
+  auto it    = words_.find( clean );
+  return ( it == words_.end() ) ? 0 : it->second;
+}
 /////////////////////// END-TO-DO (4) ////////////////////////////
 
 
@@ -79,7 +99,18 @@ namespace
 
 // Implement WordFrequency::mostFrequentWord() const - See requirements
 ///////////////////////// TO-DO (5) //////////////////////////////
+template<typename Hasher>
+std::string WordFrequency<Hasher>::mostFrequentWord() const
+{
+  if( words_.empty() ) return {};
 
+  auto best = words_.begin();
+  for( auto it = std::next( words_.begin() ); it != words_.end(); ++it )
+  {
+    if( it->second > best->second ) best = it;
+  }
+  return best->first;
+}
 /////////////////////// END-TO-DO (5) ////////////////////////////
 
 
@@ -90,8 +121,16 @@ namespace
 
 // Implement WordFrequency::maxBucketSize() const - See requirements
 ///////////////////////// TO-DO (6) //////////////////////////////
-  /// Hint: see the unordered_map's bucket interface at https://en.cppreference.com/w/cpp/container/unordered_map
-
+template<typename Hasher>
+std::size_t WordFrequency<Hasher>::maxBucketSize() const
+{
+  std::size_t maxSize = 0;
+  for( std::size_t i = 0; i < words_.bucket_count(); ++i )
+  {
+    maxSize = std::max( maxSize, words_.bucket_size( i ) );
+  }
+  return maxSize;
+}
 /////////////////////// END-TO-DO (6) ////////////////////////////
 
 
@@ -102,7 +141,13 @@ namespace
 
 // Implement WordFrequency::bucketSizeAverage() const - See requirements
 ///////////////////////// TO-DO (7) //////////////////////////////
-
+template<typename Hasher>
+double WordFrequency<Hasher>::bucketSizeAverage() const
+{
+  auto buckets = words_.bucket_count();
+  if( buckets == 0 ) return 0.0;
+  return static_cast<double>( words_.size() ) / static_cast<double>( buckets );
+}
 /////////////////////// END-TO-DO (7) ////////////////////////////
 
 
